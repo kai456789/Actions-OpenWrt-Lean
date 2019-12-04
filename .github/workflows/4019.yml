@@ -1,11 +1,11 @@
 #=================================================
-#   Description: Build OpenWrt using GitHub Actions
-#   Lisence: MIT
-#   Author: P3TERX
-#   Blog: https://p3terx.com
+# Description: Build OpenWrt using GitHub Actions
+# Lisence: MIT
+# Author: P3TERX
+# Blog: https://p3terx.com
 #=================================================
 
-name: Build OpenWrt Lean 4019
+name: Build OpenWrt 4019
 
 on: 
   release:
@@ -13,6 +13,8 @@ on:
   push:
     branches: 
       - master
+    paths:
+      - '.config4019'
 #  schedule:
 #    - cron: 0 8 * * 5
 #  watch:
@@ -27,24 +29,54 @@ jobs:
       uses: actions/checkout@master
 
     - name: Initialization environment
+      env:
+        DEBIAN_FRONTEND: noninteractive
       run: |
-        sudo apt-get update
-        sudo apt-get -y install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler
+        docker rmi `docker images -q`
+        echo "Deleting files, please wait ..."
+        sudo rm -rf \
+          /usr/share/dotnet \
+          /etc/mysql \
+          /etc/php
+        sudo -E apt-get -y purge \
+          azure-cli \
+          ghc* \
+          zulu* \
+          hhvm \
+          llvm* \
+          firefox \
+          google* \
+          dotnet* \
+          powershell \
+          openjdk* \
+          mysql* \
+          php*
+        sudo -E apt-get update
+        sudo -E apt-get -y install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler
+        sudo -E apt-get -y autoremove --purge
+        sudo -E apt-get clean
     - name: Clone source code
+      env: 
+        REPO_URL: https://github.com/coolsnowwolf/lede
+        REPO_BRANCH: master
+      run: git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
+
+    - name: Update feeds
+      run: cd openwrt && ./scripts/feeds update -a
+
+    - name: Install feeds
+      run: cd openwrt && ./scripts/feeds install -a
+
+    - name: Load custom configuration
+      env:
+        CONFIG_FILE: '.config4019'
+        DIY_SH: 'diy.sh'
       run: |
-        git clone https://github.com/coolsnowwolf/lede openwrt
+        [ -e files ] && mv files openwrt/files
+        [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
+        chmod +x $DIY_SH
         cd openwrt
-        ./scripts/feeds update -a
-        ./scripts/feeds install -a
-    - name: Load Custom Configuration
-      run: |
-        ln -sf packages openwrt/package/diy-packages
-        ln -sf files openwrt/files
-        chmod +x diy.sh
-        ./diy.sh
-        [ -e ".config4019" ] && cp .config4019 openwrt
-        cd openwrt
-        mv .config4019 .config
+        ../$DIY_SH
         make defconfig
     - name: Download package
       run: |
@@ -56,8 +88,14 @@ jobs:
         cd openwrt
         echo -e "$(nproc) thread build."
         make -j$(nproc) V=s
-    - name : Upload artifact
+    - name : Upload packages
       uses: actions/upload-artifact@master
       with:
-        name: OpenWrt
-        path: openwrt/bin
+        name: OpenWrt packages
+        path: openwrt/bin/packages
+
+    - name : Upload targets
+      uses: actions/upload-artifact@master
+      with:
+        name: OpenWrt firmware
+        path: openwrt/bin/targets
