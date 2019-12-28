@@ -104,4 +104,4 @@ jobs:
       if: always()
       with:
         name: OpenWrt_firmware
-path: ${{ env.FIRMWARE }}
+        path: ${{ env.FIRMWARE }}
