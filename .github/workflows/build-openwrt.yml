@@ -50,6 +50,11 @@ jobs:
         REPO_URL: https://github.com/coolsnowwolf/lede
         REPO_BRANCH: master
       run: git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
+      run: cd openwrt && git clone https://github.com/project-openwrt/luci-app-unblockneteasemusic.git package/luci-app-unblockneteasemusic
+      run: cd openwrt && git clone https://github.com/project-openwrt/luci-app-unblockneteasemusic-mini.git package/luci-app-unblockneteasemusic-mini
+      run: cd openwrt && git clone https://github.com/rufengsuixing/luci-app-adguardhome.git package/luci-app-adguardhome
+
+             
 
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
