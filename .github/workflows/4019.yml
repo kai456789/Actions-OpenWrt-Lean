@@ -16,8 +16,8 @@ on:
       - master
     paths:
       - '.config4019'
-#  schedule:
-#    - cron: 0 8 * * 5
+  schedule:
+     - cron: 0 16 * * 5
   watch:
     types: [started]
 env:
