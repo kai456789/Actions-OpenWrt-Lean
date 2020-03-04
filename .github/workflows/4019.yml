@@ -15,7 +15,7 @@ on:
     branches:
       - master
     paths:
-      - '.config4019'
+      - '.config'
   schedule:
     - cron: 0 16 * * 5
   watch:
@@ -24,12 +24,12 @@ on:
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
-  CONFIG_FILE: .config
+  CONFIG_FILE: .config4019
   DIY_SH: diy.sh
   SSH_ACTIONS: false
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
-  TZ: Asia/Shanghai
+  TZ: Asia/Taiwan
 
 jobs:
   build:
