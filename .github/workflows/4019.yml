@@ -16,8 +16,8 @@ on:
       - master
     paths:
       - '.config'
-  schedule:
-    - cron: 0 16 * * 5
+#  schedule:
+#    - cron: 0 8 * * 5
   watch:
     types: started
 
@@ -29,7 +29,7 @@ env:
   SSH_ACTIONS: false
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
-  TZ: Asia/Taiwan
+  TZ: Asia/Shanghai
 
 jobs:
   build:
@@ -52,7 +52,7 @@ jobs:
         sudo -E apt-get -qq clean
         curl -fsSL https://raw.githubusercontent.com/P3TERX/dotfiles/master/.bashrc >> ~/.bashrc
     - name: Clone source code
-      run: git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt && cd openwrt && cd openwrt && git clone https://github.com/project-openwrt/luci-app-unblockneteasemusic.git package/luci-app-unblockneteasemusic && git clone https://github.com/rufengsuixing/luci-app-adguardhome.git package/luci-app-adguardhome
+      run: git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt && cd openwrt && git clone https://github.com/project-openwrt/luci-app-unblockneteasemusic.git package/luci-app-unblockneteasemusic && git clone https://github.com/rufengsuixing/luci-app-adguardhome.git package/luci-app-adguardhome
 
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
