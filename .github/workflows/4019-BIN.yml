@@ -30,7 +30,7 @@ env:
   TZ: Asia/Shanghai
   TARGET: ipq40xx
   SUBTARGET: generic
-  DEVICE: openwrt-ipq40xx-acrh17-128m
+  DEVICE: asus_rt-acrh17
   FREE_UP_DISK: true
   SSH_ACTIONS: false
   UPLOAD_TMP_LINK: true
@@ -118,14 +118,14 @@ jobs:
       uses: actions/upload-artifact@master
       if: steps.compile.outputs.status == 'success'
       with:
-        name: ${{ env.DEVICE }}-squashfs-nand-factory.ubi
+        name: ${{ env.DEVICE }}-squashfs-factory.trx
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-nand-factory.ubi
         
     - name: Upload SquashFS Sysupgrade Image
       uses: actions/upload-artifact@master
       if: steps.compile.outputs.status == 'success'
       with:
-        name: ${{ env.DEVICE }}-squashfs-nand-sysupgrade.bin
+        name: ${{ env.DEVICE }}-squashfs-sysupgrade.bin
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-nand-sysupgrade.bin
                 
     - name: Upload Files to Tmp.Link
