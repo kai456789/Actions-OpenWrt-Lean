@@ -30,7 +30,7 @@ env:
   TZ: Asia/Shanghai
   TARGET: ipq40xx
   SUBTARGET: generic
-  DEVICE: asus_rt-acrh17
+  DEVICE: openwrt-ipq40xx-asus_rt-acrh17
   FREE_UP_DISK: true
   SSH_ACTIONS: false
   UPLOAD_TMP_LINK: true
