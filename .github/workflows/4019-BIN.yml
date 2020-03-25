@@ -119,7 +119,7 @@ jobs:
       if: steps.compile.outputs.status == 'success'
       with:
         name: ${{ env.DEVICE }}-squashfs-factory.trx
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-factory.trx
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-initramfs-factory.trx
         
     - name: Upload SquashFS Sysupgrade Image
       uses: actions/upload-artifact@master
