@@ -119,14 +119,14 @@ jobs:
       if: steps.compile.outputs.status == 'success'
       with:
         name: ${{ env.DEVICE }}-squashfs-factory.trx
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-nand-factory.ubi
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-factory.trx
         
     - name: Upload SquashFS Sysupgrade Image
       uses: actions/upload-artifact@master
       if: steps.compile.outputs.status == 'success'
       with:
         name: ${{ env.DEVICE }}-squashfs-sysupgrade.bin
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-nand-sysupgrade.bin
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-sysupgrade.bin
                 
     - name: Upload Files to Tmp.Link
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_TMP_LINK == 'true'
